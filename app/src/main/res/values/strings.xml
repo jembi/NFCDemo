@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">NFC Demo</string>
     <string name="button">Button</string>
+    <string name="no_nfc_support">This device doesn\'t support NFC.</string>
+    <string name="info_disabled">NFC is disabled.</string>
+    <string name="info_waiting">Waiting for NFC chip...</string>
+    <string name="info_reading">Reading NFC chip...</string>
 
 </resources>
