@@ -1,8 +1,13 @@
 package jembi.org.nfcdemo.ui;
 
 import android.content.Intent;
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.nfc.tech.Ndef;
+import android.nfc.tech.NdefFormatable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         // setup for the buttons
         setupButton1Action();
+
+        setupFormatAction();
     }
 
     @Override
@@ -108,6 +115,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // do something
+            }
+        });
+    }
+
+    private void setupFormatAction() {
+        Button formatButton = (Button) findViewById(R.id.formatButton);
+        formatButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Ndef tag = Ndef.get(myTag);
+                try {
+                    /*since we are formatting the tag, we assume it is already prepared to store data
+                    so we need only overwrite */
+                    if(!tag.isConnected()) {
+                        tag.connect();
+                        tag.writeNdefMessage(new NdefMessage(new NdefRecord(NdefRecord.TNF_EMPTY, new byte[0], new byte[0], new byte[0])));
+                        Toast.makeText(getApplicationContext(), "Tag has been formatted", Toast.LENGTH_LONG);
+                    }
+                } catch (IOException | FormatException ex) {
+                    setupCrashHandler();
+                }
             }
         });
     }

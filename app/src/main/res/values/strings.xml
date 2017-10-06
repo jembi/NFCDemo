@@ -5,5 +5,6 @@
     <string name="info_disabled">NFC is disabled.</string>
     <string name="info_waiting">Waiting for NFC chip...</string>
     <string name="info_reading">Reading NFC chip...</string>
+    <string name="format">Format Card</string>
 
 </resources>
