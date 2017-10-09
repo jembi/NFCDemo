@@ -70,6 +70,20 @@ class NdefReaderTask extends AsyncTask<Tag, Void, String> {
         // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
         // e.g. "en"
 
+        Log.v(NFCDemoApplication.LOG_TAG, "TNF: " + record.getTnf());
+        Log.v(NFCDemoApplication.LOG_TAG, "Type: " + record.getType());
+        Log.v(NFCDemoApplication.LOG_TAG, "MimeType: " + record.toMimeType());
+        Log.v(NFCDemoApplication.LOG_TAG, "Contents: " + + record.describeContents());
+        Log.v(NFCDemoApplication.LOG_TAG, "textEncoding: " + textEncoding);
+        Log.v(NFCDemoApplication.LOG_TAG, "languageCodeLength: " + languageCodeLength);
+        Log.v(NFCDemoApplication.LOG_TAG, "payload: " + new String(payload, textEncoding));
+        Log.v(NFCDemoApplication.LOG_TAG, "payload.length: " + payload.length);
+
+        if (payload.length < languageCodeLength) {
+            Log.e(NFCDemoApplication.LOG_TAG, "Issue with determining the language code");
+            return new String(payload, textEncoding);
+        }
+
         return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
     }
 
