@@ -6,6 +6,6 @@ package jembi.org.nfcdemo.utils;
  * (or continue processing) after writing to an NFC chip
  */
 public interface NfcWriteCallback {
-    void onWriteComplete();
+    void onWriteComplete(Boolean success);
     void onWriteError(Throwable e);
 }
