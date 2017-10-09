@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 
 import jembi.org.nfcdemo.NFCDemoApplication;
 import jembi.org.nfcdemo.R;
@@ -42,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         // setup for the buttons
         setupButton1Action();
-
         setupFormatAction();
     }
 
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Finished reading card", Toast.LENGTH_LONG).show();
                 Log.i(NFCDemoApplication.LOG_TAG, "The data is " + data);
                 setInfoText(R.string.info_waiting);
+                setNfcText(data);
             }
         });
         nfcReader.handleIntent(getIntent());
@@ -106,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
     private void setInfoText(int text) {
         TextView infoText = (TextView)findViewById(R.id.infoText);
         infoText.setText(text);
+    }
+
+    private void setNfcText(String data) {
+        TextView nfcTextDate = (TextView)findViewById(R.id.nfcTextDate);
+        nfcTextDate.setText(DateFormat.getDateTimeInstance().format(new Date()));
+        TextView nfcText = (TextView)findViewById(R.id.nfcText);
+        nfcText.setText(data);
     }
 
     private void setupButton1Action() {

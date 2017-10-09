@@ -17,7 +17,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.51"
+            android:layout_weight="3.19"
             app:srcCompat="@drawable/nfc" />
 
         <TextView
@@ -55,6 +55,21 @@
                 android:text="@string/format" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/nfcTextDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.51"
+            android:paddingBottom="0dp"
+            android:paddingTop="15dp" />
+
+        <TextView
+            android:id="@+id/nfcText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.51"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
