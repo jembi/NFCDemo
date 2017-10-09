@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -45,7 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
         // setup for the buttons
         setupHexButtonAction();
-        setupFormatAction();
+ try {
+            setupFormatAction();
+        } catch (UnsupportedEncodingException e) {
+            setupCrashHandler();
+        }
     }
 
     @Override
@@ -129,8 +134,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupFormatAction() {
+    private void setupFormatAction() throws UnsupportedEncodingException {
         Button formatButton = (Button) findViewById(R.id.formatButton);
+        String lang = "en";
+        byte[] textBytes = new byte[0];
+        byte[] langBytes  = lang.getBytes("UTF-8");
+        int    langLength = langBytes.length;
+        int    textLength = textBytes.length;
+        final byte[] payload    = new byte[1 + langLength + textLength];
+
+
         formatButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -141,11 +154,17 @@ public class MainActivity extends AppCompatActivity {
                     so we need only overwrite */
                     if(!tag.isConnected()) {
                         tag.connect();
-                        tag.writeNdefMessage(new NdefMessage(new NdefRecord(NdefRecord.TNF_EMPTY, new byte[0], new byte[0], new byte[0])));
-                        Toast.makeText(getApplicationContext(), "Tag has been formatted", Toast.LENGTH_LONG);
+                        tag.writeNdefMessage(new NdefMessage(new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload)));
+                        Toast.makeText(getApplicationContext(), "Tag has been formatted", Toast.LENGTH_LONG).show();
                     }
                 } catch (IOException | FormatException ex) {
                     setupCrashHandler();
+                } finally {
+                    try {
+                        tag.close();
+                    } catch (IOException e) {
+                        setupCrashHandler();
+                    }
                 }
             }
         });
