@@ -24,6 +24,7 @@ import jembi.org.nfcdemo.NFCDemoApplication;
 import jembi.org.nfcdemo.R;
 import jembi.org.nfcdemo.utils.NfcReadCallback;
 import jembi.org.nfcdemo.utils.NfcReader;
+import jembi.org.nfcdemo.utils.NfcWriter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setupCrashHandler();
 
         // setup for the buttons
-        setupButton1Action();
+        setupHexButtonAction();
         setupFormatAction();
     }
 
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         nfcReader = new NfcReader(new NfcReadCallback() {
             @Override
             public void onReadComplete(String data) throws IOException {
-                Toast.makeText(getApplicationContext(), "Finished reading card", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.message_read_finished, Toast.LENGTH_LONG).show();
                 Log.i(NFCDemoApplication.LOG_TAG, "The data is " + data);
                 setInfoText(R.string.info_waiting);
                 setNfcText(data);
@@ -117,13 +118,13 @@ public class MainActivity extends AppCompatActivity {
         nfcText.setText(data);
     }
 
-    private void setupButton1Action() {
-        Button btn1 = (Button) findViewById(R.id.button1);
-        btn1.setOnClickListener(new View.OnClickListener()
+    private void setupHexButtonAction() {
+        Button hexButton = (Button) findViewById(R.id.hexButton);
+        hexButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
-                // do something
+                new NfcWriter(myTag, getApplicationContext()).tryWrite(NFCDemoApplication.TEST_DATA);
             }
         });
     }

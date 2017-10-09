@@ -9,4 +9,5 @@ import android.app.Application;
  */
 public class NFCDemoApplication extends Application {
     public static final String LOG_TAG = "NFCDemo";
+    public static final String TEST_DATA = "This is some test data";
 }
