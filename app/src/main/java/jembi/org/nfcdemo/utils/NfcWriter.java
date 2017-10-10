@@ -30,13 +30,16 @@ public class NfcWriter {
             new NdefWriterTask(myTag, new NfcWriteCallback() {
 
                 @Override
-                public void onWriteComplete() {
-                    Toast.makeText(context, R.string.message_write_successful, Toast.LENGTH_LONG).show();
+                public void onWriteComplete(Boolean success) {
+                    if (success) {
+                        Toast.makeText(context, R.string.message_write_successful, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, R.string.error_write, Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 @Override
                 public void onWriteError(Throwable e) {
-                    Toast.makeText(context, R.string.error_write, Toast.LENGTH_LONG).show();
                     Log.e(NFCDemoApplication.LOG_TAG, "Error occurred while writing NFC card", e);
                 }
             }).execute(data);
