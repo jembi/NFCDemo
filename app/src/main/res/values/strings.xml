@@ -10,10 +10,12 @@
     <string name="no_nfc_support">This device doesn\'t support NFC.</string>
     <string name="no_nfc_tag">No NFC tag detected</string>
     <string name="error_write">Error during writing, is the NFC tag close enough to your device?</string>
+    <string name="error_format">An error occurred while formatting tag</string>
 
     <!-- success messages -->
     <string name="message_read_finished">"Finished reading card</string>
     <string name="message_write_successful">Text written to the NFC tag successfully!</string>
+    <string name="tag_format_successful">Tag has been formatted successfully!</string>
 
     <!-- buttons -->
     <string name="button">Button</string>

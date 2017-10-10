@@ -23,6 +23,7 @@ import java.util.Date;
 
 import jembi.org.nfcdemo.NFCDemoApplication;
 import jembi.org.nfcdemo.R;
+import jembi.org.nfcdemo.utils.NfcFormatter;
 import jembi.org.nfcdemo.utils.NfcReadCallback;
 import jembi.org.nfcdemo.utils.NfcReader;
 import jembi.org.nfcdemo.utils.NfcWriter;
@@ -148,24 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Ndef tag = Ndef.get(myTag);
-                try {
-                    /*since we are formatting the tag, we assume it is already prepared to store data
-                    so we need only overwrite */
-                    if(!tag.isConnected()) {
-                        tag.connect();
-                        tag.writeNdefMessage(new NdefMessage(new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload)));
-                        Toast.makeText(getApplicationContext(), "Tag has been formatted", Toast.LENGTH_LONG).show();
-                    }
-                } catch (IOException | FormatException ex) {
-                    setupCrashHandler();
-                } finally {
-                    try {
-                        tag.close();
-                    } catch (IOException e) {
-                        setupCrashHandler();
-                    }
-                }
+                new NfcFormatter(getApplicationContext(), myTag).tryFormat();
             }
         });
     }
