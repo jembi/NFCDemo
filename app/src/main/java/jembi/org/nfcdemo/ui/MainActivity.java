@@ -47,11 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         // setup for the buttons
         setupHexButtonAction();
- try {
-            setupFormatAction();
-        } catch (UnsupportedEncodingException e) {
-            setupCrashHandler();
-        }
+        setupFormatAction();
     }
 
     @Override
@@ -135,18 +131,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupFormatAction() throws UnsupportedEncodingException {
+    private void setupFormatAction() {
         Button formatButton = (Button) findViewById(R.id.formatButton);
-        String lang = "en";
-        byte[] textBytes = new byte[0];
-        byte[] langBytes  = lang.getBytes("UTF-8");
-        int    langLength = langBytes.length;
-        int    textLength = textBytes.length;
-        final byte[] payload    = new byte[1 + langLength + textLength];
-
-
-        formatButton.setOnClickListener(new View.OnClickListener(){
-
+        formatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new NfcFormatter(getApplicationContext(), myTag).tryFormat();
