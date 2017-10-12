@@ -30,7 +30,7 @@ public class NdefFormatterTask extends AsyncTask<Void, Void, Void> {
         try {
             connectTag(tag);
             tag.writeNdefMessage(createRecord());
-        } catch (FormatException | IOException ex) {
+        } catch (Exception ex) {
             callback.onFormatError(ex);
         } finally {
             disconnectTag(tag);
@@ -53,26 +53,23 @@ public class NdefFormatterTask extends AsyncTask<Void, Void, Void> {
         int langLength = langBytes.length;
         int textLength = textBytes.length;
         final byte[] payload = new byte[1 + langLength + textLength];
+
         return new NdefMessage(new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload));
     }
 
     private void connectTag(Ndef tag) throws IOException {
-        try {
-            if (!tag.isConnected()) {
-                tag.connect();
-            }
-        } catch (IOException e) {
-            callback.onFormatError(e);
+        if (!tag.isConnected()) {
+            tag.connect();
         }
     }
 
     private void disconnectTag(Ndef tag) {
         try {
-            if(tag.isConnected()) {
+            if (tag.isConnected()) {
                 tag.close();
             }
         } catch (IOException e) {
-            callback.onFormatError(e);
+            // if an exception is thrown while closing a resource, it is OK to ignore it
         }
     }
 }
