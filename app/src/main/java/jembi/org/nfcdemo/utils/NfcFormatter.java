@@ -28,13 +28,16 @@ public class NfcFormatter {
             Toast.makeText(context, R.string.no_nfc_tag, Toast.LENGTH_LONG).show();
         } else new NdefFormatterTask(myTag, new NfcFormatterCallback() {
             @Override
-            public void onFormatComplete() {
-                Toast.makeText(context, R.string.tag_format_successful, Toast.LENGTH_LONG).show();
+            public void onFormatComplete(Boolean success) {
+                if (success) {
+                    Toast.makeText(context, R.string.tag_format_successful, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, R.string.error_format, Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFormatError(Throwable ex) {
-                Toast.makeText(context, R.string.error_format, Toast.LENGTH_LONG).show();
                 Log.e(NFCDemoApplication.LOG_TAG, "Error occurred while formatting NFC card", ex);
             }
         }).execute();

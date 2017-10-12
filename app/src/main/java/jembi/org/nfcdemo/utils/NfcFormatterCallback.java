@@ -6,6 +6,6 @@ package jembi.org.nfcdemo.utils;
 
 public interface NfcFormatterCallback {
 
-    void onFormatComplete();
+    void onFormatComplete(Boolean success);
     void onFormatError(Throwable ex);
 }

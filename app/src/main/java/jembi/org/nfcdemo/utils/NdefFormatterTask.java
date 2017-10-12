@@ -14,7 +14,7 @@ import java.io.UnsupportedEncodingException;
  * Created by Jembi Health Systems on 2017/10/09.
  */
 
-public class NdefFormatterTask extends AsyncTask<Void, Void, Void> {
+public class NdefFormatterTask extends AsyncTask<Void, Void, Boolean> {
 
     private Tag myTag;
     private NfcFormatterCallback callback;
@@ -25,24 +25,26 @@ public class NdefFormatterTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected Boolean doInBackground(Void... voids) {
+        Boolean success = true;
         Ndef tag = Ndef.get(myTag);
         try {
             connectTag(tag);
             tag.writeNdefMessage(createRecord());
         } catch (Exception ex) {
             callback.onFormatError(ex);
+            success = false;
         } finally {
             disconnectTag(tag);
         }
 
-        return null;
+        return success;
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        callback.onFormatComplete();
+    protected void onPostExecute(Boolean success) {
+        super.onPostExecute(success);
+        callback.onFormatComplete(success);
     }
 
     private NdefMessage createRecord() throws UnsupportedEncodingException {
