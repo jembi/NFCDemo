@@ -1,13 +1,10 @@
 package jembi.org.nfcdemo.ui;
 
+import android.content.ContentValues;
 import android.content.Intent;
-import android.nfc.FormatException;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
+import android.database.sqlite.SQLiteDatabase;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.nfc.tech.Ndef;
-import android.nfc.tech.NdefFormatable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,12 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.util.Date;
 
 import jembi.org.nfcdemo.NFCDemoApplication;
 import jembi.org.nfcdemo.R;
+import jembi.org.nfcdemo.database.DatabaseOpenHelper;
+import jembi.org.nfcdemo.database.DatabaseResult;
+import jembi.org.nfcdemo.database.contract.PatientContract;
 import jembi.org.nfcdemo.utils.NfcFormatter;
 import jembi.org.nfcdemo.utils.NfcReadCallback;
 import jembi.org.nfcdemo.utils.NfcReader;
@@ -33,10 +32,12 @@ public class MainActivity extends AppCompatActivity {
     private NfcAdapter nfcAdapter;
     private NfcReader nfcReader;
     private Tag myTag;
+    private DatabaseOpenHelper databaseOpenHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        databaseOpenHelper = new DatabaseOpenHelper(this);
         setContentView(R.layout.activity_main);
 
         // NFC setup
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         // setup for the buttons
         setupHexButtonAction();
         setupFormatAction();
+        setupCreateButtonAction();
     }
 
     @Override
@@ -143,12 +145,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupCrashHandler() {
         // set up crash handler to log unhandled exceptions
-        // Note: in a production app, this should be a service like Crashalytics which will
+        // Note: in a production app, this should be a service like Crashalytics whichr will
         // allow you to monitor exceptions thrown on client devices
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 Log.e(NFCDemoApplication.LOG_TAG, "App crashed!! Exception:", ex);
+            }
+        });
+    }
+
+
+    private void setupCreateButtonAction() {
+        Button createButton = (Button) findViewById(R.id.createButton);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Generating data", Toast.LENGTH_LONG).show();
+                databaseOpenHelper.insertTestData(new DatabaseResult<Boolean>() {
+
+                    @Override
+                    public void processResult(Boolean result) {
+                        if(result) {
+                            Toast.makeText(getApplicationContext(), R.string.date_created_successful, Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.error_data_create, Toast.LENGTH_LONG);
+                        }
+                    }
+                });
             }
         });
     }
