@@ -2,6 +2,7 @@ package jembi.org.nfcdemo.builders;
 
 import android.location.GnssMeasurementsEvent;
 
+import java.util.Date;
 import java.util.List;
 
 import jembi.org.nfcdemo.model.Gender;
@@ -18,7 +19,7 @@ public class PatientBuilder {
     private long id;
     private String firstName;
     private String surname;
-    private long dateOfBirth;
+    private Date dateOfBirth;
     private Gender gender;
     private HealthCareWorker healthCareWorker;
     private List<Immunization> immunizations;
@@ -38,7 +39,7 @@ public class PatientBuilder {
         return this;
     }
 
-    public PatientBuilder withDateOfBirth(long dateOfBirth){
+    public PatientBuilder withDateOfBirth(Date dateOfBirth){
         this.dateOfBirth = dateOfBirth;
         return this;
     }

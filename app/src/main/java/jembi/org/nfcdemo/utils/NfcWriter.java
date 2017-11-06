@@ -23,10 +23,11 @@ public class NfcWriter {
         this.context = context;
     }
 
-    public void tryWrite(String data) {
+    public void tryWrite(Byte[] data) {
         if (myTag == null) {
             Toast.makeText(context, R.string.no_nfc_tag, Toast.LENGTH_LONG).show();
         } else {
+
             new NdefWriterTask(myTag, new NfcWriteCallback() {
 
                 @Override
@@ -44,5 +45,14 @@ public class NfcWriter {
                 }
             }).execute(data);
         }
+    }
+
+    public static Byte[] convertToBytes(byte[] data) {
+        Byte[] bytes = new Byte[data.length];
+        int i = 0;
+        for (byte b : data) {
+            bytes[i++] = b;
+        }
+        return bytes;
     }
 }

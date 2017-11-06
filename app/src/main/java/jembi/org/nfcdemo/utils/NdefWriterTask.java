@@ -17,7 +17,7 @@ import jembi.org.nfcdemo.NFCDemoApplication;
  * Adapted from https://github.com/tumbledwyer/NearFieldHealth/tree/master/app/src/main/java/org/jembi/nearFieldHealth/nfcUtils
  * @author tumbledwyer
  */
-class NdefWriterTask extends AsyncTask<String, Void, Boolean> {
+class NdefWriterTask extends AsyncTask<Byte, Void, Boolean> {
 
     public static final String LANGUAGE_CODE = "en";
     public static final String ENCODING = "UTF-8";
@@ -31,20 +31,18 @@ class NdefWriterTask extends AsyncTask<String, Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(String... data) {
+    protected Boolean doInBackground(Byte... data) {
         Boolean success = true;
         try {
-            write(myTag, data[0]);
-            Log.i(NFCDemoApplication.LOG_TAG, "here1");
+            write(myTag, data);
         } catch (Throwable e) {
             callback.onWriteError(e);
-            Log.i(NFCDemoApplication.LOG_TAG, "here2");
             success = false;
         }
         return success;
     }
 
-    private void write(Tag myTag, String data) throws IOException, FormatException {
+    private void write(Tag myTag, Byte[] data) throws IOException, FormatException {
         // Create the Ndef Record
         NdefRecord[] records = {createRecord(data)};
         NdefMessage message = new NdefMessage(records);
@@ -58,13 +56,12 @@ class NdefWriterTask extends AsyncTask<String, Void, Boolean> {
         ndef.close();
     }
 
-    private NdefRecord createRecord(String data) throws UnsupportedEncodingException {
+    private NdefRecord createRecord(Byte[] data) throws UnsupportedEncodingException {
 
         byte[] langBytes = LANGUAGE_CODE.getBytes(ENCODING);
         int langLength = langBytes.length;
 
-        byte[] textBytes = data.getBytes(ENCODING);
-        int textLength = textBytes.length;
+        int textLength = data.length;
 
         byte[] payload = new byte[1 + langLength + textLength];
 
@@ -73,9 +70,18 @@ class NdefWriterTask extends AsyncTask<String, Void, Boolean> {
 
         // copy langbytes and textbytes into payload
         System.arraycopy(langBytes, 0, payload, 1, langLength);
-        System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
+        System.arraycopy(convertBytes(data), 0, payload, 1 + langLength, textLength);
 
         return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload);
+    }
+
+    private byte[] convertBytes(Byte[] data) {
+        byte[] bytes = new byte[data.length];
+        int i = 0;
+        for (Byte b : data) {
+            bytes[i++] = b;
+        }
+        return bytes;
     }
 
     @Override

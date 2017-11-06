@@ -18,14 +18,6 @@ public class Person {
         this.id = id;
     }
 
-    public String getName() {
-        return firstName;
-    }
-
-    public void setName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getFirstName() {
         return firstName;
     }

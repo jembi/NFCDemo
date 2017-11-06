@@ -34,11 +34,11 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/hexButton"
+                android:id="@+id/byteButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/hex" />
+                android:text="@string/bytes" />
 
             <Button
                 android:id="@+id/createButton"

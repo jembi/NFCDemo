@@ -1,18 +1,23 @@
 package jembi.org.nfcdemo.model;
 
+import java.util.Date;
+
 /**
  * Created by Jembi Health Systems on 2017/10/12.
  */
 
 public class Immunization {
 
-    private long administrationDate;
+    private Date administrationDate;
     private String administrationLocation;
     private String vaccinationCode;
     private String vaccinationDose;
     private String vaccinationReason;
 
-    public Immunization(long administrationDate, String administrationLocation, String vaccinationCode, String vaccinationDose, String vaccinationReason) {
+    public Immunization() {
+    }
+
+    public Immunization(Date administrationDate, String administrationLocation, String vaccinationCode, String vaccinationDose, String vaccinationReason) {
         this.administrationDate = administrationDate;
         this.administrationLocation = administrationLocation;
         this.vaccinationCode = vaccinationCode;
@@ -21,11 +26,11 @@ public class Immunization {
     }
 
 
-    public long getAdministrationDate() {
+    public Date getAdministrationDate() {
         return administrationDate;
     }
 
-    public void setAdministrationDate(long administrationDate) {
+    public void setAdministrationDate(Date administrationDate) {
         this.administrationDate = administrationDate;
     }
 
@@ -59,5 +64,16 @@ public class Immunization {
 
     public void setVaccinationReason(String vaccinationReason) {
         this.vaccinationReason = vaccinationReason;
+    }
+
+    @Override
+    public String toString() {
+        return "Immunization{" +
+                "administrationDate=" + administrationDate +
+                ", administrationLocation='" + administrationLocation + '\'' +
+                ", vaccinationCode='" + vaccinationCode + '\'' +
+                ", vaccinationDose='" + vaccinationDose + '\'' +
+                ", vaccinationReason='" + vaccinationReason + '\'' +
+                '}';
     }
 }

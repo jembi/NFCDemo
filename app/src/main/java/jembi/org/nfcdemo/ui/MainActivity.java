@@ -1,8 +1,6 @@
 package jembi.org.nfcdemo.ui;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +13,18 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import jembi.org.nfcdemo.NFCDemoApplication;
 import jembi.org.nfcdemo.R;
+import jembi.org.nfcdemo.builders.ImmunizationBuilder;
+import jembi.org.nfcdemo.builders.PatientBuilder;
 import jembi.org.nfcdemo.database.DatabaseOpenHelper;
 import jembi.org.nfcdemo.database.DatabaseResult;
-import jembi.org.nfcdemo.database.contract.PatientContract;
+import jembi.org.nfcdemo.model.Gender;
+import jembi.org.nfcdemo.model.Patient;
 import jembi.org.nfcdemo.utils.NfcFormatter;
 import jembi.org.nfcdemo.utils.NfcReadCallback;
 import jembi.org.nfcdemo.utils.NfcReader;
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setupCrashHandler();
 
         // setup for the buttons
-        setupHexButtonAction();
+        setupByteButtonAction();
         setupFormatAction();
         setupCreateButtonAction();
     }
@@ -100,11 +103,16 @@ public class MainActivity extends AppCompatActivity {
 
         nfcReader = new NfcReader(new NfcReadCallback() {
             @Override
-            public void onReadComplete(String data) throws IOException {
+            public void onReadComplete(Byte[] data) throws IOException {
                 Toast.makeText(getApplicationContext(), R.string.message_read_finished, Toast.LENGTH_LONG).show();
                 Log.i(NFCDemoApplication.LOG_TAG, "The data is " + data);
+                Log.i(NFCDemoApplication.LOG_TAG, "The number of bytes are " + data.length);
                 setInfoText(R.string.info_waiting);
+
                 setNfcText(data);
+
+                Patient patient = Patient.readObject(data);
+                Log.i(NFCDemoApplication.LOG_TAG, "Patient data is: " + patient);
             }
         });
         nfcReader.handleIntent(getIntent());
@@ -115,6 +123,19 @@ public class MainActivity extends AppCompatActivity {
         infoText.setText(text);
     }
 
+    private void setNfcText(Byte[] data) {
+        TextView nfcTextDate = (TextView)findViewById(R.id.nfcTextDate);
+        nfcTextDate.setText(DateFormat.getDateTimeInstance().format(new Date()));
+        TextView nfcText = (TextView)findViewById(R.id.nfcText);
+        // convert bytes to string
+        byte[] bytes = new byte[data.length];
+        int i = 0;
+        for (Byte b : data) {
+            bytes[i++] = b;
+        }
+        nfcText.setText(new String(bytes)); // FIXME: note this should include an encoding e.g. UTF-8
+    }
+
     private void setNfcText(String data) {
         TextView nfcTextDate = (TextView)findViewById(R.id.nfcTextDate);
         nfcTextDate.setText(DateFormat.getDateTimeInstance().format(new Date()));
@@ -122,13 +143,30 @@ public class MainActivity extends AppCompatActivity {
         nfcText.setText(data);
     }
 
-    private void setupHexButtonAction() {
-        Button hexButton = (Button) findViewById(R.id.hexButton);
+    private void setupByteButtonAction() {
+        Button hexButton = (Button) findViewById(R.id.byteButton);
         hexButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
-                new NfcWriter(myTag, getApplicationContext()).tryWrite(NFCDemoApplication.TEST_DATA);
+
+                Patient patient = new PatientBuilder()
+                        .withDateOfBirth(new Date())
+                        .withFirstName("Clara")
+                        .withSurname("Tester")
+                        .withGender(Gender.FEMALE)
+                        .withImmunizations(
+                                Arrays.asList(
+                                        new ImmunizationBuilder()
+                                                .withAdministrationDate(new Date())
+                                                .withAdministrationLocation("Location")
+                                                .withVaccinationCode("BCG01")
+                                                .withVaccinationDose("100")
+                                                .withVaccinationReason("Because")
+                                                .build()))
+                        .build();
+
+                new NfcWriter(myTag, getApplicationContext()).tryWrite(Patient.writeObject(patient));
             }
         });
     }

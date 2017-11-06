@@ -119,7 +119,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         contentValues.put(PatientEntry.COLUMN_NAME_PATIENT_ID, patient.getId());
         contentValues.put(PatientEntry.COLUMN_NAME_FIRST_NAME, patient.getFirstName());
         contentValues.put(PatientEntry.COLUMN_NAME_SURNAME, patient.getSurname());
-        contentValues.put(PatientEntry.COLUMN_NAME_DATE_OF_BIRTH, patient.getDateOfBirth());
+        contentValues.put(PatientEntry.COLUMN_NAME_DATE_OF_BIRTH, patient.getDateOfBirth().getTime());
         contentValues.put(PatientEntry.COLUMN_NAME_GENDER, patient.getGender().name());
         return contentValues;
     }
@@ -152,7 +152,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         Patient patient = buildPatient(Arrays.asList(immunization), healthCareWorker);
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PatientImmunizationEntry.COLUMN_NAME_DATE_OF_ADMINISTRATION, immunization.getAdministrationDate());
+        contentValues.put(PatientImmunizationEntry.COLUMN_NAME_DATE_OF_ADMINISTRATION, immunization.getAdministrationDate().getTime());
         contentValues.put(PatientImmunizationEntry.COLUMN_NAME_PLACE_OF_ADMINISTRATION, immunization.getAdministrationLocation());
         contentValues.put(PatientImmunizationEntry.COLUMN_NAME_VACCINATION_CODE, immunization.getVaccinationCode());
         contentValues.put(PatientImmunizationEntry.COLUMN_NAME_VACCINATION_CODE, immunization.getVaccinationCode());
@@ -164,7 +164,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     private Immunization buildImmunization() {
         return new ImmunizationBuilder()
-                    .withAdministrationDate(new Date().getTime())
+                    .withAdministrationDate(new Date())
                     .withAdministrationLocation("Tokai")
                     .withVaccinationCode("TEST")
                     .withVaccinationDose("Dose")
@@ -183,7 +183,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     private Patient buildPatient(List<Immunization> immunizations, HealthCareWorker healthCareWorker) {
         return new PatientBuilder()
-                .withDateOfBirth(new Date().getTime())
+                .withDateOfBirth(new Date())
                 .withFirstName("Test")
                 .withSurname("Patient")
                 .withGender(Gender.FEMALE)

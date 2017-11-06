@@ -1,5 +1,7 @@
 package jembi.org.nfcdemo.builders;
 
+import java.util.Date;
+
 import jembi.org.nfcdemo.model.Immunization;
 
 /**
@@ -8,13 +10,13 @@ import jembi.org.nfcdemo.model.Immunization;
 
 public class ImmunizationBuilder {
 
-    private long administrationDate;
+    private Date administrationDate;
     private String administrationLocation;
     private String vaccinationCode;
     private String vaccinationDose;
     private String vaccinationReason;
 
-    public ImmunizationBuilder withAdministrationDate(long administrationDate) {
+    public ImmunizationBuilder withAdministrationDate(Date administrationDate) {
         this.administrationDate = administrationDate;
         return this;
     }

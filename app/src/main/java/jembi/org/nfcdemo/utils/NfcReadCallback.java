@@ -8,5 +8,5 @@ import java.io.IOException;
  * @author tumbledwyer
  */
 public interface NfcReadCallback {
-    void onReadComplete(String data) throws IOException;
+    void onReadComplete(Byte[] data) throws IOException;
 }

@@ -17,7 +17,7 @@ import jembi.org.nfcdemo.NFCDemoApplication;
  * From https://github.com/tumbledwyer/NearFieldHealth/tree/master/app/src/main/java/org/jembi/nearFieldHealth/nfcUtils
  * @author tumbledwyer
  */
-class NdefReaderTask extends AsyncTask<Tag, Void, String> {
+class NdefReaderTask extends AsyncTask<Tag, Void, Byte[]> {
 
     private NfcReadCallback callback;
 
@@ -26,7 +26,7 @@ class NdefReaderTask extends AsyncTask<Tag, Void, String> {
     }
 
     @Override
-    protected String doInBackground(Tag... params) {
+    protected Byte[] doInBackground(Tag... params) {
         Tag tag = params[0];
 
         Ndef ndef = Ndef.get(tag);
@@ -40,7 +40,7 @@ class NdefReaderTask extends AsyncTask<Tag, Void, String> {
         for (NdefRecord ndefRecord : records) {
             if (ndefRecord.getTnf() == NdefRecord.TNF_WELL_KNOWN && Arrays.equals(ndefRecord.getType(), NdefRecord.RTD_TEXT)) {
                 try {
-                    return readText(ndefRecord);
+                    return readBytes(ndefRecord);
                 } catch (UnsupportedEncodingException e) {
                     Log.e(NFCDemoApplication.LOG_TAG, "Unsupported Encoding", e);
                 }
@@ -87,8 +87,31 @@ class NdefReaderTask extends AsyncTask<Tag, Void, String> {
         return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
     }
 
+    private Byte[] readBytes(NdefRecord record) throws UnsupportedEncodingException {
+        /*
+         * See NFC forum specification for "Text Record Type Definition" at 3.2.1
+         *
+         * http://www.nfc-forum.org/specs/
+         *
+         * bit_7 defines encoding
+         * bit_6 reserved for future use, must be 0
+         * bit_5..0 length of IANA language code
+         */
+        byte[] payload = record.getPayload();
+        int languageCodeLength = payload[0] & 0063;
+        int startIndex = 1 + languageCodeLength; // discard the first byte and the language code
+        Byte[] bytes = new Byte[0];
+        if (startIndex < payload.length) {
+            bytes = new Byte[payload.length - startIndex];
+            for (int i = startIndex; i < payload.length; i++) {
+                bytes[i - startIndex] = payload[i];
+            }
+        }
+        return bytes;
+    }
+
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(Byte[] result) {
         if (result != null) {
             try {
                 callback.onReadComplete(result);

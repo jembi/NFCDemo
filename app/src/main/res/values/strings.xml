@@ -12,6 +12,7 @@
     <string name="error_write">Error during writing. Is the NFC tag close enough to your device?</string>
     <string name="error_format">Error while formatting tag. Is the NFC tag close enough to your device?</string>
     <string name="error_data_create">Error while creating data. Is SQL syntax correct?</string>
+    <string name="error_data">Error while processing data.</string>
 
     <!-- success messages -->
     <string name="message_read_finished">"Finished reading card</string>
@@ -21,7 +22,7 @@
 
     <!-- buttons -->
     <string name="button">Button</string>
-    <string name="hex">Test HEX</string>
+    <string name="bytes">Save bytes</string>
     <string name="format">Format Card</string>
     <string name="create">Create Data</string>
 
