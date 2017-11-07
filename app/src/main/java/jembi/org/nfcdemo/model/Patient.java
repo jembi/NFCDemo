@@ -103,11 +103,10 @@ public class Patient extends Person {
     @Override
     public String toString() {
         return "Patient{" +
-                "dateOfBirth=" + dateOfBirth +
+                "dateOfBirth=" + new SimpleDateFormat("dd-MMM-yyyy").format(dateOfBirth) +
                 ", gender=" + gender +
                 ", healthCareWorker=" + healthCareWorker +
-                ", immunizations{" + immunizations +
-                "  }" +
+                ", " + immunizations +
                 "}";
     }
 

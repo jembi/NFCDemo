@@ -1,5 +1,6 @@
 package jembi.org.nfcdemo.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -69,7 +70,7 @@ public class Immunization {
     @Override
     public String toString() {
         return "Immunization{" +
-                "administrationDate=" + administrationDate +
+                "administrationDate=" + new SimpleDateFormat("yyyy-MM-dd").format(administrationDate) +
                 ", administrationLocation='" + administrationLocation + '\'' +
                 ", vaccinationCode='" + vaccinationCode + '\'' +
                 ", vaccinationDose='" + vaccinationDose + '\'' +

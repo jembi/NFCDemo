@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Patient patient = Patient.readObject(data);
                 Log.i(NFCDemoApplication.LOG_TAG, "Patient data is: " + patient);
+                if (patient != null) {
+                    setNfcText(patient.toString());
+                }
             }
         });
         nfcReader.handleIntent(getIntent());
