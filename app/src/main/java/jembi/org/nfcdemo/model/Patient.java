@@ -186,33 +186,32 @@ public class Patient extends Person {
         patient.setDateOfBirth(getDateFromBytes(bytes, fromPosition, toPosition));
         Log.i(NFCDemoApplication.LOG_TAG, "date of birth = " + patient.getDateOfBirth());
 
-        // FIXME: read immunizations
         List<Immunization> immunizations = new ArrayList<>();
-        while (toPosition < bytes.length) {
+        while (toPosition+1 < bytes.length) {
             Immunization immunization = new Immunization();
             // immunization date:
             fromPosition = toPosition + 1;
-            toPosition = getPositionOfNextDelimeter(bytes, toPosition);
+            toPosition = getPositionOfNextDelimeter(bytes, fromPosition);
             immunization.setAdministrationDate(getDateFromBytes(bytes, fromPosition, toPosition));
             Log.i(NFCDemoApplication.LOG_TAG, "Immunization administrationDate = " + immunization.getAdministrationDate());
             // clinic code
             fromPosition = toPosition + 1;
-            toPosition = getPositionOfNextDelimeter(bytes, toPosition);
+            toPosition = getPositionOfNextDelimeter(bytes, fromPosition);
             immunization.setAdministrationLocation(getStringFromBytes(bytes, fromPosition, toPosition));
             Log.i(NFCDemoApplication.LOG_TAG, "Immunization administrationLocation = " + immunization.getAdministrationLocation());
             // vaccination code
             fromPosition = toPosition + 1;
-            toPosition = getPositionOfNextDelimeter(bytes, toPosition);
+            toPosition = getPositionOfNextDelimeter(bytes, fromPosition);
             immunization.setVaccinationCode(getStringFromBytes(bytes, fromPosition, toPosition));
             Log.i(NFCDemoApplication.LOG_TAG, "Immunization vaccinationCode = " + immunization.getVaccinationCode());
             // dose
             fromPosition = toPosition + 1;
-            toPosition = getPositionOfNextDelimeter(bytes, toPosition);
+            toPosition = getPositionOfNextDelimeter(bytes, fromPosition);
             immunization.setVaccinationDose(getStringFromBytes(bytes, fromPosition, toPosition));
             Log.i(NFCDemoApplication.LOG_TAG, "Immunization vaccinationDose = " + immunization.getVaccinationDose());
             // reason
             fromPosition = toPosition + 1;
-            toPosition = getPositionOfNextDelimeter(bytes, toPosition);
+            toPosition = getPositionOfNextDelimeter(bytes, fromPosition);
             immunization.setVaccinationReason(getStringFromBytes(bytes, fromPosition, toPosition));
             Log.i(NFCDemoApplication.LOG_TAG, "Immunization vaccinationReason = " + immunization.getVaccinationReason());
 
@@ -222,19 +221,6 @@ public class Patient extends Person {
 
         return patient;
     }
-
-    /*private static Patient convertBytesToPatient(Byte[] bytes) throws ParseException {
-        Patient patient = new Patient();
-        int position = getPositionOfNextDelimeter(bytes, 0, DELIMITER);
-        byte[] dateBytes = new byte[position];
-        for (int i=0; i<position; i++) {
-            dateBytes[i] = bytes[i]; // easy case where i starts at 0
-        }
-        BigInteger dateDigits = new BigInteger(dateBytes);
-        Log.i(NFCDemoApplication.LOG_TAG, "Date = " + dateDigits);
-        patient.setDateOfBirth(new SimpleDateFormat("yyyyMMdd").parse(dateDigits.toString()));
-        return patient;
-    }*/
 
     private static List<Byte> addToBytes(List<Byte> bytes, byte[] data) {
         for (byte b : data) {
@@ -269,7 +255,11 @@ public class Patient extends Person {
         return stringBuilder.toString();
     }
 
-    private static Date getDateFromBytes(Byte[] bytes, int fromIndex, int toIndex) throws ParseException {
+    // ParseException is thrown if the number is not a date
+    // NumberFormatException is thrown if the bytes can't be converted to a number (e.g. if the length is null)
+    // FIXME: figure out how to deal with these exceptions ...
+    private static Date getDateFromBytes(Byte[] bytes, int fromIndex, int toIndex) throws ParseException, NumberFormatException {
+        Log.i(NFCDemoApplication.LOG_TAG, "Getting date from bytes. fromIndex="+fromIndex+" toIndex="+toIndex);
         byte[] dateBytes = new byte[toIndex - fromIndex];
         for (int i=0, j=fromIndex; j<toIndex; i++, j++) {
             dateBytes[i] = bytes[j];
