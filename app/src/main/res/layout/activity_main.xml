@@ -17,7 +17,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.51"
+            android:layout_weight="3.19"
             app:srcCompat="@drawable/nfc" />
 
         <TextView
@@ -34,27 +34,48 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/byteButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/button" />
+                android:text="@string/bytes" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/createButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="@string/create" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/formatButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="@string/format" />
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/nfcTextDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.51"
+            android:paddingBottom="0dp"
+            android:paddingTop="15dp" />
+
+        <ScrollView
+            android:id="@+id/ScrollView01"
+            android:layout_height="60dp"
+            android:layout_width="fill_parent">
+
+        <TextView
+            android:id="@+id/nfcText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        </ScrollView>
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

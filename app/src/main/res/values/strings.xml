@@ -1,9 +1,29 @@
 <resources>
     <string name="app_name">NFC Demo</string>
-    <string name="button">Button</string>
-    <string name="no_nfc_support">This device doesn\'t support NFC.</string>
+
+    <!-- info status text-->
     <string name="info_disabled">NFC is disabled.</string>
     <string name="info_waiting">Waiting for NFC chip...</string>
     <string name="info_reading">Reading NFC chip...</string>
+
+    <!-- error messages -->
+    <string name="no_nfc_support">This device doesn\'t support NFC.</string>
+    <string name="no_nfc_tag">No NFC tag detected</string>
+    <string name="error_write">Error during writing. Is the NFC tag close enough to your device?</string>
+    <string name="error_format">Error while formatting tag. Is the NFC tag close enough to your device?</string>
+    <string name="error_data_create">Error while creating data. Is SQL syntax correct?</string>
+    <string name="error_data">Error while processing data.</string>
+
+    <!-- success messages -->
+    <string name="message_read_finished">"Finished reading card</string>
+    <string name="message_write_successful">Text written to the NFC tag successfully!</string>
+    <string name="tag_format_successful">Tag has been formatted successfully!</string>
+    <string name="date_created_successful">Data has been created successfully!</string>
+
+    <!-- buttons -->
+    <string name="button">Button</string>
+    <string name="bytes">Save bytes</string>
+    <string name="format">Format Card</string>
+    <string name="create">Create Data</string>
 
 </resources>
